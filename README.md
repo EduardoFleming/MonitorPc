@@ -23,7 +23,7 @@ O **Monitor Pc** é uma aplicação desktop que vai além de apenas mostrar núm
 Este projeto está em **desenvolvimento (Work in Progress)**. Algumas funcionalidades possuem restrições importantes:
 
 1.  **Sistema Operacional:** Atualmente funciona **apenas no Windows**.
-2.  **Placa de Vídeo:** O monitoramento detalhado (uso % e temperatura) só funciona em placas **NVIDIA**. Outras placas serão listadas, mas sem dados em tempo real.
+2.  **Placa de Vídeo:** O monitoramento detalhado (uso % e temperatura) só funciona em placas **NVIDIA**. Outras placas serão identificadas, mas sem dados em tempo real.
 3.  **Versão do Python:**
     - ✅ Recomendado: **Python 3.12**
     - ❌ **Não funciona no Python 3.14** (devido a incompatibilidades com bibliotecas gráficas).
