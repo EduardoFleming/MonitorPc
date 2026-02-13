@@ -22,9 +22,25 @@ def getGpuInfo():
         pythoncom.CoInitialize()
         c = wmi.WMI()
         gpuInfo = c.Win32_VideoController()
-        if gpuInfo:
-            return gpuInfo[0].Name
-        return "Nenhuma GPU encontrada"
+        
+        if not gpuInfo:
+            return "Nenhuma GPU encontrada"
+        
+        # --- LÓGICA DE PRIORIDADE ---
+        # 1. Procura especificamente por NVIDIA
+        for gpu in gpuInfo:
+            if "NVIDIA" in gpu.Name.upper():
+                return gpu.Name
+        
+        # 2. Se não achar NVIDIA, procura por AMD (Dedicada)
+        # (Evita pegar gráficos integrados genéricos se tiver uma dedicada)
+        for gpu in gpuInfo:
+            if "AMD" in gpu.Name.upper() and "GRAPHICS" not in gpu.Name.upper():
+                 return gpu.Name
+
+        # 3. Se não tiver preferência, retorna a primeira da lista
+        return gpuInfo[0].Name
+
     except Exception:
         return "Erro ao obter GPU"
 
@@ -52,11 +68,14 @@ def getDiskInfo():
         partitions = psutil.disk_partitions()
         diskInfo = []
         for p in partitions:
-            usage = psutil.disk_usage(p.mountpoint)
-            total = usage.total / (1024**3)
-            used = usage.used / (1024**3)
-            diskStr = (f"Disco {p.device} - Total: {total:.2f} GB | Usado: {used:.2f} GB ({usage.percent}%)")
-            diskInfo.append(diskStr)
+            try:
+                usage = psutil.disk_usage(p.mountpoint)
+                total = usage.total / (1024**3)
+                used = usage.used / (1024**3)
+                diskStr = (f"Disco {p.device} - Total: {total:.2f} GB | Usado: {used:.2f} GB ({usage.percent}%)")
+                diskInfo.append(diskStr)
+            except PermissionError:
+                continue # Pula discos que o Windows bloqueou acesso
         return diskInfo
     except Exception:
         return ["Erro ao obter informações de disco"]
