@@ -34,14 +34,13 @@ Este projeto está em **desenvolvimento (Work in Progress)**. Algumas funcionali
 
 ### 1. Pré-requisitos
 - Ter o [Python 3.12](https://www.python.org/downloads/) instalado.
-- Uma **API Key do Google Gemini** (Grátis). Você pode gerar a sua [aqui no Google AI Studio](https://aistudio.google.com/app/apikey).
 
 ### 2. Instalação e Execução
 
 Não é necessário instalar bibliotecas manualmente. O script `app.py` cuida de tudo.
 
 1. Baixe o repositório ou coloque todos os arquivos `.py` em uma pasta.
-2. Abra o terminal (CMD ou PowerShell) dentro dessa pasta.
+2. Abra o terminal (CMD ou PowerShell) dentro dessa pasta. (Pode ser feito pelo VSCode)
 3. Execute o comando:
 
 ```bash
