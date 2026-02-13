@@ -33,7 +33,16 @@ Este projeto está em **desenvolvimento (Work in Progress)**. Algumas funcionali
 ## 🛠️ Como Usar
 
 ### 1. Pré-requisitos
+
 - Ter o [Python 3.12](https://www.python.org/downloads/) instalado.
+- Uma **API Key do Google Gemini** (Grátis). Gere a sua [aqui no Google AI Studio](https://aistudio.google.com/app/apikey).
+- **Configuração Obrigatória da Chave:**
+  1. Após gerar sua chave, abra o arquivo `main.py` em um editor de texto (Bloco de Notas, VS Code, etc).
+  2. Localize a variável `API_KEY` logo no início do arquivo.
+  3. Cole sua chave dentro das aspas. Deve ficar assim:
+     ```python
+     API_KEY = "AIzaSyD_Sua_Chave_Aqui_..."
+     ```
 
 ### 2. Instalação e Execução
 
