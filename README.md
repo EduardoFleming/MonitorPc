@@ -49,7 +49,7 @@ Este projeto está em **desenvolvimento (Work in Progress)**. Algumas funcionali
 Não é necessário instalar bibliotecas manualmente. O script `app.py` cuida de tudo.
 
 1. Baixe o repositório ou coloque todos os arquivos `.py` em uma pasta.
-2. Abra o terminal (CMD ou PowerShell) dentro dessa pasta. (Pode ser feito pelo VSCode)
+2. Abra o terminal (CMD ou PowerShell) dentro dessa pasta. (Pode ser feito pelo VS Code)
 3. Execute o comando:
 
 ```bash
