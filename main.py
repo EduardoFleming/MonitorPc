@@ -9,7 +9,7 @@ import aiAnalysis
 st.set_page_config(page_title="Monitor de Hardware", layout="wide")
 
 # --- CONFIGURAÇÃO DA IA ---
-API_KEY = "AIzaSyAD-s802jeV6kHr8fDJ-X-iiHsDIb88Bnk" 
+API_KEY = "SUA CHAVE DE API" 
 
 # --- INICIALIZAÇÃO DO ESTADO (SESSION STATE) ---
 if "analise_pronta" not in st.session_state:
@@ -173,3 +173,4 @@ with tab2:
         
         # Pausa
         time.sleep(2)
+
