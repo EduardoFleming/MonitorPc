@@ -1,6 +1,6 @@
 @echo off
 echo ==========================================
-echo 🚀 Preparando para subir o Monitor PC...
+echo Preparando para subir o Monitor PC...
 echo ==========================================
 
 :: Adiciona todos os arquivos novos ou modificados (ignorando o que ta no .gitignore)
@@ -13,5 +13,5 @@ git commit -m "Atualizacao automatica - %date% %time%"
 git push -u origin main
 
 echo.
-echo ✅ Sucesso! Codigo enviado para o GitHub.
+echo Sucesso! Codigo enviado para o GitHub.
 pause
