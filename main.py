@@ -8,7 +8,7 @@ import aiAnalysis
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="Monitor de Hardware", layout="wide")
 
-# --- MENU LATERAL (SIDEBAR) PARA A CHAVE DA API ---
+# --- MENU LATERAL (SIDEBAR) ---
 with st.sidebar:
     st.header("⚙️ Configurações da IA")
     st.write("Para usar o Diagnóstico IA, insira sua chave do Google Gemini abaixo.")
