@@ -57,9 +57,8 @@ Com a janela do **Monitor PC** aberta:
 ## 👨‍💻 Tecnologias Utilizadas
 
 - **Interface:** Streamlit & PyWebview.
-- **IA:** Google Generative AI (Gemini Flash).
+- **IA:** Google Generative AI (Gemini Flash 3.0).
 - **Monitoramento:** Psutil, WMI e PyNVML.
-- **Automação:** Git & Shell Script (Batch).
 
 ---
 
