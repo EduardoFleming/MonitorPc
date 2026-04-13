@@ -1,0 +1,14 @@
+# Ignora arquivos de cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignora ambientes virtuais
+venv/
+env/
+.venv/
+
+# Ignora arquivos com chaves e senhas (segurança)
+.env
+config.json
