@@ -228,7 +228,7 @@ class HardwareAnalysisWindow(QMainWindow):
         side_layout.setContentsMargins(20, 24, 20, 20)
         side_layout.setSpacing(9)
 
-        brand = QLabel("HARDWARE ANALYSIS")
+        brand = QLabel("HardwareAnalysis")
         brand.setObjectName("brand")
         side_layout.addWidget(brand)
         brand_sub = QLabel("HARDWARE · UPGRADES")
@@ -551,7 +551,7 @@ class HardwareAnalysisWindow(QMainWindow):
             QMainWindow, QWidget#pages, QWidget#contentPage, QWidget#advisorForm {{ background-color: {colors['window']}; color: {colors['text']}; }}
             QWidget {{ font-family: 'Segoe UI', 'Inter', sans-serif; font-size: 13px; color: {colors['text']}; }}
             QFrame#sidebar {{ background: {colors['sidebar']}; color: #f7f7f5; }}
-            QLabel#brand {{ color: #ffffff; font-size: 18px; font-weight: 750; letter-spacing: 1.6px; }}
+            QLabel#brand {{ color: #ffffff; font-size: 17px; font-weight: 700; letter-spacing: 0; }}
             QLabel#brandSub {{ color: #aab3b3; font-size: 10px; font-weight: 700; letter-spacing: 1.1px; }}
             QLabel#systemBadge {{ color: #bec8c6; font-size: 11px; padding: 10px 0; }}
             QPushButton#navButton {{ text-align: left; color: #cbd1cf; background: transparent; border: 0; border-radius: 7px; padding: 11px 12px; font-weight: 550; }}
