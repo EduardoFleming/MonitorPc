@@ -1,67 +1,53 @@
-# 🖥️ Monitor PC & AI Tech
+# HardwareAnalysis
 
-> **Monitoramento de Hardware Inteligente com Diagnóstico via Inteligência Artificial**
+Aplicativo desktop para identificar componentes do computador e receber recomendações de upgrade contextualizadas com Gemini. O objetivo é ajudar a decidir **o que atualizar, por que atualizar e o que confirmar antes da compra**.
 
-O **Monitor PC** é uma ferramenta de diagnóstico que une a coleta de dados de hardware em tempo real com a inteligência do Google Gemini. Ele não apenas exibe suas especificações, mas atua como um consultor técnico que analisa o equilíbrio do seu setup para o seu perfil de uso.
+## O que oferece
 
----
+- Interface desktop nativa em Python com PySide6.
+- Temas claro e escuro, com a escolha salva entre execuções.
+- Identificação de CPU, GPU, placa-mãe, memória, discos e sistema operacional, conforme os dados disponíveis.
+- Métricas de CPU e memória em tempo real, com histórico gráfico local.
+- Leitura opcional de carga e temperatura em GPUs NVIDIA quando NVML e o driver estão disponíveis.
+- Consultor com filtros para jogos leves/AAA, trabalho ou uso doméstico, orçamento e preferência de compra.
+- Recomendações com prioridade, justificativa, compatibilidade e verificações antes da compra.
 
-## 🚀 Funcionalidades
+## Instalação e execução
 
-- **📈 Monitoramento em Tempo Real:** Acompanhamento dinâmico de uso de CPU, RAM e GPU (NVIDIA), incluindo temperaturas.
-- **📊 Specs Detalhadas:** Identificação precisa de Processador, Placa-Mãe (incluindo modelos OEM como HP/Dell), GPU e Armazenamento.
-- **🧠 Consultor IA (Gemini):**
-  - Análise personalizada baseada no seu objetivo (Jogos, Trabalho ou Uso Doméstico).
-  - Identificação de gargalos técnicos reais.
-  - Tabela de recomendações com links diretos para pesquisa de preços no Google Shopping.
-- **🖼️ Interface Nativa:** Roda como um aplicativo de desktop em uma janela dedicada para melhor experiência do usuário.
+Recomendado: Python 3.12 em ambiente virtual.
 
----
+```bash
+python -m venv .venv
+```
 
-## 🛠️ Requisitos e Compatibilidade
+Ative o ambiente virtual e inicie o app diretamente. Na primeira execução, ele verifica e instala as dependências necessárias com o próprio Python que está rodando o programa — incluindo WMI no Windows e NVML para sensores NVIDIA. É preciso ter conexão com a internet nessa primeira inicialização.
 
-Para garantir o funcionamento perfeito, verifique os requisitos:
+```bash
+python main.py
+```
 
-1. **Sistema Operacional:** Windows 10 ou 11 (devido ao uso de bibliotecas `wmi` e `pywin32`).
-2. **Hardware NVIDIA:** O monitoramento de temperatura e carga de GPU é exclusivo para placas NVIDIA (via `pynvml`).
-3. **Versão do Python:** - ✅ Recomendado: **Python 3.12**
-   - ⚠️ **Atenção:** Pode haver incompatibilidades com versões muito recentes como o Python 3.14 devido a bibliotecas gráficas.
+Também é possível iniciar pelo atalho legado `python app.py`.
 
----
+## Compatibilidade e limites
 
-## ⚙️ Como Usar (Passo a Passo)
+O app busca funcionar em Windows, Linux e macOS. A disponibilidade de identificação de GPU, placa-mãe e sensores depende do sistema, permissões, drivers e ferramentas instaladas. CPU, memória e discos funcionam via Psutil. A leitura atual de carga/temperatura da GPU usa NVML, compatível com NVIDIA; provedores de sensores para AMD/Intel e temperatura de CPU não estão integrados.
 
-### 1. Obtenha sua API Key do Gemini
-O projeto utiliza a inteligência do Google para realizar as análises.
-1. Acesse o [Google AI Studio](https://aistudio.google.com/app/apikey).
-2. Clique no botão **"Create API key"**.
-3. Copie a chave gerada (um código longo que começa com `AIza...`).
+A IA não substitui verificações de compatibilidade: placa-mãe OEM, BIOS, fonte, gabinete, soquete e tipo de memória podem exigir confirmação manual. Os campos adicionais do consultor são opcionais e são ignorados quando vazios. Se o orçamento não comportar um upgrade que valha a pena, o consultor deve explicar isso sem recomendar que o usuário ultrapasse o limite.
 
-### 2. Execução do Aplicativo
-Você não precisa instalar bibliotecas manualmente; o inicializador faz o trabalho duro.
-1. Baixe os arquivos do repositório para uma pasta no seu computador.
-2. Abra o **Terminal** (ou PowerShell) dentro dessa pasta. No VS Code, você pode usar o atalho `Ctrl + '`.
-3. Digite o comando abaixo e **pressione a tecla Enter**:
-   `python app.py`
-4. Aguarde alguns segundos. O sistema verificará as dependências e abrirá a janela do aplicativo automaticamente.
+O Gemini não consulta preços em tempo real. Links de pesquisa são atalhos para buscar produtos, não cotações. Ao solicitar uma análise, os dados detectados do PC e as preferências são enviados ao Gemini.
 
-### 3. Configuração da Chave e Análise
-Com a janela do **Monitor PC** aberta:
-1. No canto esquerdo, localize o menu cinza (a **Barra Lateral**).
-2. Clique no campo **"🔑 API Key do Gemini"**.
-3. Cole a sua chave (Ctrl + V) e **pressione a tecla Enter** no teclado para confirmar.
-4. Agora, navegue até a aba **"🧠 Consultor IA"**, selecione seu perfil e clique no botão azul **"🔍 Analisar Agora"**.
+## Chave Gemini
 
----
+Crie uma chave no [Google AI Studio](https://aistudio.google.com/app/apikey) e informe-a na barra lateral do app. A chave permanece somente na sessão atual e não é gravada em arquivo. Opcionalmente, configure `GEMINI_API_KEY` no ambiente antes de iniciar.
 
-## 👨‍💻 Tecnologias Utilizadas
+## Estrutura
 
-- **Interface:** Streamlit & PyWebview.
-- **IA:** Google Generative AI (Gemini Flash 3.0).
-- **Monitoramento:** Psutil, WMI e PyNVML.
+- `main.py`: valida/instala dependências e contém a interface PySide6, formulários, monitoramento e recomendações.
+- `app.py`: atalho opcional para iniciar `main.py`.
+- `hardwareInfo.py`: descoberta de hardware com caminhos específicos por sistema e fallbacks.
+- `hardwareMonitoring.py`: métricas de CPU, memória e provedor opcional NVIDIA NVML.
+- `aiAnalysis.py`: prompt do consultor, validação de JSON e links de pesquisa.
 
----
+## Privacidade
 
-## 📝 Notas de Versão
-- **v1.0:** Lançamento inicial com interface em abas, monitoramento estável e integração com Gemini.
-- **Correção de Portas:** Implementada alocação dinâmica de portas para evitar conflitos ao abrir o app.
+A coleta de hardware é local. Ao pedir uma análise, os dados detectados, o perfil e as preferências são enviados ao Gemini usando a chave informada. A chave digitada no app não é gravada pelo aplicativo.

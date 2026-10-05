@@ -1,30 +1,59 @@
 import platform
+
 import psutil
 
-# Só importa o pynvml se o sistema for Windows
-if platform.system() == "Windows":
-    try:
-        import pynvml
-    except ImportError:
-        pynvml = None
-else:
+try:
+    import pynvml
+except ImportError:
     pynvml = None
 
+# A primeira leitura do Psutil serve apenas para inicializar o contador.
+psutil.cpu_percent(interval=None)
+_nvml_handle = None
+_nvml_error = None
+
+
 def getCpuUsage():
-    return psutil.cpu_percent(interval=1)
+    return psutil.cpu_percent(interval=None)
+
 
 def getRamUsage():
-    return psutil.virtual_memory().percent
+    memory = psutil.virtual_memory()
+    return {"percent": memory.percent, "used_gb": round(memory.used / (1024**3), 2)}
+
 
 def getGpuUsage():
-    if platform.system() != "Windows" or pynvml is None:
-        return {"usage": "N/A", "temp": "N/A"}
+    global _nvml_handle, _nvml_error
+    if pynvml is None:
+        return {"usage": None, "temp": None, "name": None, "note": "GPU não suportada por este provedor"}
     try:
-        pynvml.nvmlInit()
-        handle = pynvml.nvmlDeviceGetHandleByIndex(0)
-        utilization = pynvml.nvmlDeviceGetUtilizationRates(handle)
-        temp = pynvml.nvmlDeviceGetTemperature(handle, pynvml.NVML_TEMPERATURE_GPU)
-        pynvml.nvmlShutdown()
-        return {"usage": f"{utilization.gpu}%", "temp": f"{temp}°C"}
-    except Exception:
-        return {"usage": "N/A", "temp": "N/A"}
+        if _nvml_handle is None and _nvml_error is None:
+            pynvml.nvmlInit()
+            _nvml_handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+        if _nvml_error:
+            raise RuntimeError(_nvml_error)
+        name = pynvml.nvmlDeviceGetName(_nvml_handle)
+        if isinstance(name, bytes):
+            name = name.decode(errors="replace")
+        utilization = pynvml.nvmlDeviceGetUtilizationRates(_nvml_handle)
+        try:
+            temperature = pynvml.nvmlDeviceGetTemperature(_nvml_handle, pynvml.NVML_TEMPERATURE_GPU)
+        except Exception:
+            temperature = None
+        return {
+            "usage": utilization.gpu,
+            "temp": temperature,
+            "name": name,
+            "note": None,
+        }
+    except Exception as error:
+        _nvml_error = str(error)
+        return {"usage": None, "temp": None, "name": None, "note": str(error)}
+
+
+def getPlatformNote():
+    if platform.system() != "Windows":
+        return "Uso de CPU, memória e discos disponível. Sensores de GPU variam por sistema e fabricante."
+    if pynvml is None:
+        return "Uso de CPU e memória disponível. Métricas da GPU exigem NVIDIA NVML e driver compatível."
+    return None

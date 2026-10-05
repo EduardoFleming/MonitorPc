@@ -12,3 +12,4 @@ env/
 # Ignora arquivos com chaves e senhas (segurança)
 .env
 config.json
+.streamlit/secrets.toml
