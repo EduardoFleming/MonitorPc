@@ -1,53 +1,64 @@
 # HardwareAnalysis
 
-Aplicativo desktop para identificar componentes do computador e receber recomendações de upgrade contextualizadas com Gemini. O objetivo é ajudar a decidir **o que atualizar, por que atualizar e o que confirmar antes da compra**.
+Aplicativo desktop para conhecer os componentes do computador e receber recomendações de upgrade com ajuda do Gemini. O consultor considera o perfil de uso, o orçamento e as informações disponíveis sobre o hardware para explicar **o que pode valer a pena atualizar e o que confirmar antes de comprar**.
 
-## O que oferece
+## Recursos
 
-- Interface desktop nativa em Python com PySide6.
-- Temas claro e escuro, com a escolha salva entre execuções.
-- Identificação de CPU, GPU, placa-mãe, memória, discos e sistema operacional, conforme os dados disponíveis.
-- Métricas de CPU e memória em tempo real, com histórico gráfico local.
-- Leitura opcional de carga e temperatura em GPUs NVIDIA quando NVML e o driver estão disponíveis.
-- Consultor com filtros para jogos leves/AAA, trabalho ou uso doméstico, orçamento e preferência de compra.
-- Recomendações com prioridade, justificativa, compatibilidade e verificações antes da compra.
+- Tela de componentes detectados: processador, placa de vídeo, memória, placa-mãe, armazenamento e sistema operacional.
+- Monitoramento ao vivo de CPU e memória, com gráfico do último minuto.
+- Leitura opcional de uso e temperatura de GPU NVIDIA compatível.
+- Consultoria para jogos, trabalho e uso doméstico, com perguntas específicas para cada perfil.
+- Campos opcionais para orçamento, resolução, fonte, placa-mãe e outros dados que ajudam a conferir compatibilidade.
+- Recomendações priorizadas, com justificativa e pontos a verificar antes da compra.
+- Temas claro e escuro; a preferência fica salva entre execuções.
+
+## Requisitos
+
+- Python 3.12 recomendado.
+- Conexão com a internet na primeira execução, para que o aplicativo instale as dependências que estiverem faltando.
+- Uma chave da API Gemini para usar o consultor de upgrades.
+
+O aplicativo foi planejado para Windows, Linux e macOS. A identificação de alguns componentes e sensores varia conforme o sistema, as permissões e os drivers instalados. A leitura de GPU atualmente usa NVML, voltada a placas NVIDIA compatíveis.
 
 ## Instalação e execução
 
-Recomendado: Python 3.12 em ambiente virtual.
+Clone ou baixe o repositório, abra um terminal na pasta do projeto e execute:
 
 ```bash
-python -m venv .venv
+python app.py
 ```
 
-Ative o ambiente virtual e inicie o app diretamente. Na primeira execução, ele verifica e instala as dependências necessárias com o próprio Python que está rodando o programa — incluindo WMI no Windows e NVML para sensores NVIDIA. É preciso ter conexão com a internet nessa primeira inicialização.
+`app.py` inicia a interface desktop do HardwareAnalysis. Na primeira execução, o `main.py` verifica e instala as dependências Python necessárias usando o mesmo interpretador. No Windows, também tenta instalar WMI/PyWin32; NVML é instalado para habilitar sensores NVIDIA. Se a instalação automática falhar, o aplicativo informa o comando de instalação.
 
-```bash
-python main.py
-```
+Também é possível iniciar diretamente com `python main.py`.
 
-Também é possível iniciar pelo atalho legado `python app.py`.
+## Configurar o Gemini
 
-## Compatibilidade e limites
+1. Crie uma chave no [Google AI Studio](https://aistudio.google.com/app/apikey).
+2. Abra o HardwareAnalysis e informe a chave no campo **Chave Gemini**, na barra lateral.
+3. Acesse **Consultor de upgrades**, escolha o tipo de uso e clique em **Analisar meu computador**.
 
-O app busca funcionar em Windows, Linux e macOS. A disponibilidade de identificação de GPU, placa-mãe e sensores depende do sistema, permissões, drivers e ferramentas instaladas. CPU, memória e discos funcionam via Psutil. A leitura atual de carga/temperatura da GPU usa NVML, compatível com NVIDIA; provedores de sensores para AMD/Intel e temperatura de CPU não estão integrados.
+A chave digitada fica apenas na sessão atual e não é gravada pelo aplicativo. Se quiser evitar digitá-la em cada execução, configure `GEMINI_API_KEY` no ambiente antes de abrir o app.
 
-A IA não substitui verificações de compatibilidade: placa-mãe OEM, BIOS, fonte, gabinete, soquete e tipo de memória podem exigir confirmação manual. Os campos adicionais do consultor são opcionais e são ignorados quando vazios. Se o orçamento não comportar um upgrade que valha a pena, o consultor deve explicar isso sem recomendar que o usuário ultrapasse o limite.
+Ao solicitar uma análise, os componentes detectados e as preferências preenchidas são enviados ao serviço Gemini. A coleta e o monitoramento de hardware acontecem localmente.
 
-O Gemini não consulta preços em tempo real. Links de pesquisa são atalhos para buscar produtos, não cotações. Ao solicitar uma análise, os dados detectados do PC e as preferências são enviados ao Gemini.
+## Como usar o consultor
 
-## Chave Gemini
+- Selecione **Jogos**, **Trabalho** ou **Uso doméstico**. As perguntas seguintes mudam conforme a escolha.
+- Em jogos, indique se o foco são competitivos leves, títulos AAA, jogos indie ou outro perfil. É possível informar um jogo específico.
+- Informe o orçamento se tiver um limite. Se ele não comportar uma melhoria que valha a pena, o consultor deve explicar isso sem recomendar ultrapassá-lo.
+- Os campos adicionais de compatibilidade são opcionais. Se não souber uma informação, deixe-a em branco; ela será desconsiderada.
 
-Crie uma chave no [Google AI Studio](https://aistudio.google.com/app/apikey) e informe-a na barra lateral do app. A chave permanece somente na sessão atual e não é gravada em arquivo. Opcionalmente, configure `GEMINI_API_KEY` no ambiente antes de iniciar.
+## Limites das recomendações e preços
 
-## Estrutura
+O Gemini auxilia na análise, mas não substitui a confirmação de compatibilidade. Soquete, BIOS, fonte, dimensões do gabinete e tipo de memória podem exigir conferência manual, especialmente em computadores OEM.
 
-- `main.py`: valida/instala dependências e contém a interface PySide6, formulários, monitoramento e recomendações.
-- `app.py`: atalho opcional para iniciar `main.py`.
-- `hardwareInfo.py`: descoberta de hardware com caminhos específicos por sistema e fallbacks.
-- `hardwareMonitoring.py`: métricas de CPU, memória e provedor opcional NVIDIA NVML.
-- `aiAnalysis.py`: prompt do consultor, validação de JSON e links de pesquisa.
+O aplicativo **não consulta preços em tempo real**. Os botões de pesquisa abrem resultados de produtos; eles não são cotações e podem incluir ofertas indisponíveis ou incompatíveis. Confirme preço, estoque, vendedor e compatibilidade na loja antes de comprar.
 
-## Privacidade
+## Estrutura do projeto
 
-A coleta de hardware é local. Ao pedir uma análise, os dados detectados, o perfil e as preferências são enviados ao Gemini usando a chave informada. A chave digitada no app não é gravada pelo aplicativo.
+- `app.py`: ponto de entrada recomendado.
+- `main.py`: interface PySide6, verificação de dependências, formulários e apresentação das recomendações.
+- `hardwareInfo.py`: descoberta de componentes com caminhos específicos por sistema operacional.
+- `hardwareMonitoring.py`: métricas de CPU, memória e provedor NVIDIA NVML opcional.
+- `aiAnalysis.py`: instruções do consultor, validação da resposta JSON e links de pesquisa.
